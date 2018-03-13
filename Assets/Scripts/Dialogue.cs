@@ -11,21 +11,7 @@ public class Dialogue : MonoBehaviour
         get { return focusPoint; }
     }
 
-    // dialogue of the starting ghost
-    public static string[] StartDialogue
-    {
-        get
-        {
-            return new string[]
-            {
-                "hello",
-                "welcome to heck",
-                "you gotta find your body",
-                "if you wanna leave",
-                "have fun"
-            };
-        }
-    }
+
 
     string printedDialogue;
     public string PrintedDialogue
@@ -67,7 +53,7 @@ public class Dialogue : MonoBehaviour
     PlayerMovement playerMover;
     GhostTalk talker;
 
-    public void startConversation(string[] dialogue, GameObject focus, PlayerMovement playerMovement, GhostTalk talk)
+    public void startConversation(Message dialogue, GameObject focus, PlayerMovement playerMovement, GhostTalk talk)
     {
         playerMover = playerMovement;
         talker = talk;
@@ -101,12 +87,12 @@ public class Dialogue : MonoBehaviour
     /// <param name="dialogue">
     /// A list of things for the ghost to say.
     /// </param>
-    private IEnumerator conversationInit(string[] dialogue)
+    private IEnumerator conversationInit(Message dialogue)
     {
         follower.ghostConversation(focusPoint);
-        
+
         // run through each of the lines of dialogue for the ghost to say
-        for (int index = 0; index < dialogue.Length; index++)
+        for (int index = 0; index < dialogue.messages.Length; index++)
         {
             skipDialogue = false;
             nextLine = false;
@@ -114,7 +100,7 @@ public class Dialogue : MonoBehaviour
             endOfLine = false;
 
             // convert the current line to a list of chars
-            char[] lineLetters = dialogue[index].ToCharArray();
+            char[] lineLetters = dialogue.messages[index].ToCharArray();
             
             // slowly fill the current line in using these chars
             for (int letter = 0; letter < lineLetters.Length; letter++)
@@ -128,7 +114,9 @@ public class Dialogue : MonoBehaviour
                 }
 
                 PrintedDialogue += lineLetters[letter];
-                yield return new WaitForSeconds(.1f);
+                dialogueText.fontSize = dialogue.messageSize[index];
+
+                yield return new WaitForSeconds(dialogue.messagePlayLength[index]);
             }
 
             // update the status of the dialogue so the player now has a chance to go to the next line
@@ -157,3 +145,115 @@ public class Dialogue : MonoBehaviour
     }
 
 }
+
+/// <summary>
+/// me shitty array methods
+/// </summary>
+public static class Array
+{
+    /// <summary>
+    /// Fills an array
+    /// </summary>
+    /// <param name="array">Array to fill.</param>
+    /// <param name="value">Value to fill it with.</param>
+    /// <typeparam name="T">The type of the array.</typeparam>
+    public static void fillArray<T>(this T[] array, T value)
+    {
+        for (int index = 0; index < array.Length; index++)
+            array[index] = value;
+    }
+}
+
+/// <summary>
+/// Create a message with properties like length to play a message and the size for each message.
+/// </summary>
+public class Message
+{
+    public string[] messages;
+
+    public float[] messagePlayLength;
+    public static float DefaultLength = .1f;
+    
+    public int[] messageSize;
+    public static int DefaultSize = 50;
+
+    public Message(string[] message)
+    {
+        messages = message;
+
+        initializeDefaultSize();
+        initializeDefaultLength();
+    }
+
+    public Message(string[] message, float[] playLength)
+    {
+        messages = message;
+
+        initializeDefaultSize();
+    }
+
+    public Message(string[] message, int[] size)
+    {
+        messages = message;
+
+        messageSize = size;
+        initializeDefaultLength();
+    }
+
+    public Message(string[] message, float[] playLength, int[] size)
+    {
+        messages = message;
+
+        messagePlayLength = playLength;
+        messageSize = size;
+    }
+
+    private void initializeDefaultLength()
+    {
+        messagePlayLength = new float[messages.Length];
+        Array.fillArray(messagePlayLength, DefaultLength);
+    }
+
+    private void initializeDefaultSize()
+    {
+        messageSize = new int[messages.Length];
+        Array.fillArray(messageSize, DefaultSize);
+    }
+
+}
+
+/// <summary>
+/// Contains a bunch of preset messages to use in conjunction with the Message class w/ maybe some properties 
+/// </summary>
+public static class PresetMessages
+{
+    private static string[] startGhostMessage =
+    {
+        "hello",                        // 1
+        "welcome to heck",              // 2
+        "you gotta find your body",     // 3
+        "if you wanna leave",           // 4
+        "you could always stay though", // 5
+        "i could use a pal",            // 6
+        "oh well",                      // 7
+        "have fun",                     // 8
+        "i guess"                       // 9
+    };
+
+    // message for the first ghost the player sees to say
+    public static Message StartGhostMessage()
+    {
+        float[] startGhostMessageLength = new float[startGhostMessage.Length];
+        startGhostMessageLength.fillArray(Message.DefaultLength);
+        startGhostMessageLength[8] = .15f;
+
+        int[] startGhostMessageSize = new int[startGhostMessage.Length];
+        startGhostMessageSize.fillArray(Message.DefaultSize);
+        startGhostMessageSize[8] = 35;
+
+        return new Message(startGhostMessage, startGhostMessageLength, startGhostMessageSize);
+    }
+
+}
+
+

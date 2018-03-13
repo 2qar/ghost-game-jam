@@ -13,6 +13,8 @@ public class GhostTalk : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        Message message = new Message(new string[] { "hello", "world" });
+
         sr = GetComponent<SpriteRenderer>();
         playerMovement = GetComponent<PlayerMovement>();
 	}
@@ -62,7 +64,8 @@ public class GhostTalk : MonoBehaviour
 
         // attach the dialogue management script to the focus point to handle the actual conversation stuff
         Dialogue dialogue = focus.AddComponent<Dialogue>();
-        dialogue.startConversation(Dialogue.StartDialogue, focus, playerMovement, this);
+
+        dialogue.startConversation(PresetMessages.StartGhostMessage(), focus, playerMovement, this);
     }
 
     /// <summary>
