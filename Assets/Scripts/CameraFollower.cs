@@ -44,8 +44,8 @@ public class CameraFollower : MonoBehaviour
     {
         // x and y positions
         float[] positions = smoother(target);
-        if (target != null)
-            transform.position = new Vector3(positions[0], positions[1], -10);
+        //if (target != null)
+        transform.position = new Vector3(positions[0], positions[1], -10);
     }
 
     /// <summary>

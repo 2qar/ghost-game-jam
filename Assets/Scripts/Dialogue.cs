@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// sets up a nice conversation with a friendly ghosty boye
+/// </summary>
 public class Dialogue : MonoBehaviour
 {
     private GameObject focusPoint;
@@ -10,8 +13,6 @@ public class Dialogue : MonoBehaviour
     {
         get { return focusPoint; }
     }
-
-
 
     string printedDialogue;
     public string PrintedDialogue
@@ -37,6 +38,7 @@ public class Dialogue : MonoBehaviour
         
     }
 
+    // bunch of conversation stuff
     bool skipDialogue;
     bool endOfLine;
     bool nextLine;
@@ -53,6 +55,13 @@ public class Dialogue : MonoBehaviour
     PlayerMovement playerMover;
     GhostTalk talker;
 
+    /// <summary>
+    /// Starts a conversation with a ghost.
+    /// </summary>
+    /// <param name="dialogue">Dialogue.</param>
+    /// <param name="focus">Focus.</param>
+    /// <param name="playerMovement">Player movement.</param>
+    /// <param name="talk">Talk.</param>
     public void startConversation(Message dialogue, GameObject focus, PlayerMovement playerMovement, GhostTalk talk)
     {
         playerMover = playerMovement;
@@ -81,11 +90,11 @@ public class Dialogue : MonoBehaviour
 
     /// <summary>
     /// The actual conversation part of the conversation; gets a list of lines for a ghost to say and has him say them.
-    /// If the player presses the Z key at the end of a line, it will advance to the next one.
-    /// If the player presses the X key in the middle of a line, then it will fill the line in instead of doing the slow-fill stuff.
+    /// Z key advances to next line
+    /// X key mid-line fills the line in instead of waiting slowly to fill it in
     /// </summary>
     /// <param name="dialogue">
-    /// A list of things for the ghost to say.
+    /// A message for the ghost to say.
     /// </param>
     private IEnumerator conversationInit(Message dialogue)
     {
@@ -145,115 +154,3 @@ public class Dialogue : MonoBehaviour
     }
 
 }
-
-/// <summary>
-/// me shitty array methods
-/// </summary>
-public static class Array
-{
-    /// <summary>
-    /// Fills an array
-    /// </summary>
-    /// <param name="array">Array to fill.</param>
-    /// <param name="value">Value to fill it with.</param>
-    /// <typeparam name="T">The type of the array.</typeparam>
-    public static void fillArray<T>(this T[] array, T value)
-    {
-        for (int index = 0; index < array.Length; index++)
-            array[index] = value;
-    }
-}
-
-/// <summary>
-/// Create a message with properties like length to play a message and the size for each message.
-/// </summary>
-public class Message
-{
-    public string[] messages;
-
-    public float[] messagePlayLength;
-    public static float DefaultLength = .1f;
-    
-    public int[] messageSize;
-    public static int DefaultSize = 50;
-
-    public Message(string[] message)
-    {
-        messages = message;
-
-        initializeDefaultSize();
-        initializeDefaultLength();
-    }
-
-    public Message(string[] message, float[] playLength)
-    {
-        messages = message;
-
-        initializeDefaultSize();
-    }
-
-    public Message(string[] message, int[] size)
-    {
-        messages = message;
-
-        messageSize = size;
-        initializeDefaultLength();
-    }
-
-    public Message(string[] message, float[] playLength, int[] size)
-    {
-        messages = message;
-
-        messagePlayLength = playLength;
-        messageSize = size;
-    }
-
-    private void initializeDefaultLength()
-    {
-        messagePlayLength = new float[messages.Length];
-        Array.fillArray(messagePlayLength, DefaultLength);
-    }
-
-    private void initializeDefaultSize()
-    {
-        messageSize = new int[messages.Length];
-        Array.fillArray(messageSize, DefaultSize);
-    }
-
-}
-
-/// <summary>
-/// Contains a bunch of preset messages to use in conjunction with the Message class w/ maybe some properties 
-/// </summary>
-public static class PresetMessages
-{
-    private static string[] startGhostMessage =
-    {
-        "hello",                        // 1
-        "welcome to heck",              // 2
-        "you gotta find your body",     // 3
-        "if you wanna leave",           // 4
-        "you could always stay though", // 5
-        "i could use a pal",            // 6
-        "oh well",                      // 7
-        "have fun",                     // 8
-        "i guess"                       // 9
-    };
-
-    // message for the first ghost the player sees to say
-    public static Message StartGhostMessage()
-    {
-        float[] startGhostMessageLength = new float[startGhostMessage.Length];
-        startGhostMessageLength.fillArray(Message.DefaultLength);
-        startGhostMessageLength[8] = .15f;
-
-        int[] startGhostMessageSize = new int[startGhostMessage.Length];
-        startGhostMessageSize.fillArray(Message.DefaultSize);
-        startGhostMessageSize[8] = 35;
-
-        return new Message(startGhostMessage, startGhostMessageLength, startGhostMessageSize);
-    }
-
-}
-
-

@@ -2,8 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Let the player talk to ghooooosts
+/// </summary>
 public class GhostTalk : MonoBehaviour
 {
+    public static GhostTalk instance;
+    [HideInInspector]
+    public Collider2D ghost;
+
     SpriteRenderer sr;
     PlayerMovement playerMovement;
 
@@ -11,9 +18,9 @@ public class GhostTalk : MonoBehaviour
     public bool talkingToGhost;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
-        Message message = new Message(new string[] { "hello", "world" });
+        instance = this;
 
         sr = GetComponent<SpriteRenderer>();
         playerMovement = GetComponent<PlayerMovement>();
@@ -30,13 +37,13 @@ public class GhostTalk : MonoBehaviour
     /// </summary>
     void talkToGhostInput()
     {
-        Collider2D ghost = ghostToTalkTo("Player");
+        ghost = ghostToTalkTo("Player");
 
         bool canTalkToGhost = false;
 
         // if the ghost collider actually exists and actually is a ghost, the player can talk to a ghost
         if (ghost != null)
-            if (ghost.ToString().Contains("FriendlyEnemy"))
+            if (ghost.gameObject.tag == "Ghost")
                 canTalkToGhost = true;
 
         // if the player can talk to a ghost and they press the talk key, guess what happens
@@ -49,29 +56,33 @@ public class GhostTalk : MonoBehaviour
     /// <summary>
     /// Have a conversation with a ghost
     /// </summary>
-    void talkToGhost(GameObject ghost)
+    void talkToGhost(GameObject scaryghost)
     {
         talkingToGhost = true;
 
         // make the ghost face the player for the conversation like a polite boy
-        SpriteRenderer ghostSr = ghost.GetComponent<SpriteRenderer>();
+        SpriteRenderer ghostSr = scaryghost.GetComponent<SpriteRenderer>();
         if (sr.flipX)
             ghostSr.flipX = false;
         else
             ghostSr.flipX = true;
 
-        GameObject focus = createFocusPoint(ghost, transform);
+        GameObject focus = createFocusPoint(scaryghost, transform);
 
         // attach the dialogue management script to the focus point to handle the actual conversation stuff
         Dialogue dialogue = focus.AddComponent<Dialogue>();
 
-        dialogue.startConversation(PresetMessages.StartGhostMessage(), focus, playerMovement, this);
+        // get the message for the ghost to say based on the lines they have on their manager
+        Message ghostMessage = scaryghost.GetComponent<EnemyManager>().message;
+
+        // start the conversation now that a bunch of stuff is set up
+        dialogue.startConversation(ghostMessage, focus, playerMovement, this);
     }
 
     /// <summary>
     /// Create a focus point for the camera between the ghost to talk to and the player.
     /// </summary>
-    /// <param name="ghost">
+    /// <param name="scaryghost">
     /// Ghost to have a nice little conversation with.
     /// </param>
     /// <param name="player">
@@ -80,17 +91,17 @@ public class GhostTalk : MonoBehaviour
     /// <returns>
     /// The focus point created between the two.
     /// </returns>
-    private GameObject createFocusPoint(GameObject ghost, Transform player)
+    private GameObject createFocusPoint(GameObject scaryghost, Transform player)
     {
         // get the distance between the player and the ghost
-        float distance = Vector2.Distance(transform.position, ghost.transform.position);
+        float distance = Vector2.Distance(transform.position, scaryghost.transform.position);
 
         // get a point that's in the middle of the ghost and the player
         Vector2 focusPoint;
-        if (ghost.transform.position.x > transform.position.x)
+        if (scaryghost.transform.position.x > transform.position.x)
             focusPoint = new Vector2(transform.position.x + (distance / 2), transform.position.y);
         else
-            focusPoint = new Vector2(ghost.transform.position.x + (distance / 2), transform.position.y);
+            focusPoint = new Vector2(scaryghost.transform.position.x + (distance / 2), transform.position.y);
 
         // create a focus point gameobject at the point between the two
         GameObject focus = new GameObject("FocusPoint");
