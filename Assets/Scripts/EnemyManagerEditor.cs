@@ -1,28 +1,38 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+
+// FIXME: Valeus get cleared at runtime
+    // maybe dont use this 
 
 [CustomEditor(typeof(EnemyManager))]
-[CanEditMultipleObjects]
 public class EnemyManagerEditor : Editor
 {
-    EnemyManager enemy;
-
     SerializedProperty messageCode;
-
     SerializedProperty messageOverride;
-    bool manualOverride;
-    bool menuOpened;
+    SerializedProperty useManualLines;
+
+    public string code;
+    public bool manual;
+    string[] overrideMessages;
     int lines;
 
-    SerializedProperty useManualLines;
+    bool manualOverride;
+    bool menuOpened;
+
 
     private void OnEnable()
     {
+        // dumb property shit
         messageCode = serializedObject.FindProperty("lines");
         messageOverride = serializedObject.FindProperty("lineOverride");
-
         useManualLines = serializedObject.FindProperty("useManualLines");
+
+        code = messageCode.stringValue;
+        manual = useManualLines.boolValue;
+        // FIXME
+        //overrideMessages = messageOverride;
     }
 
     public override void OnInspectorGUI()
@@ -37,7 +47,10 @@ public class EnemyManagerEditor : Editor
             manualOverrideUI();
         else
             useManualLines.boolValue = false;
-            
+
+        if (GUI.changed)
+            Undo.RecordObject(target, "");
+
         serializedObject.ApplyModifiedProperties();
     }
 

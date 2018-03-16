@@ -1559,17 +1559,17 @@ Prefab:
     - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
         type: 2}
       propertyPath: lineOverride.Array.data[0]
-      value: h
+      value: hi
       objectReference: {fileID: 0}
     - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
         type: 2}
       propertyPath: lineOverride.Array.data[1]
-      value: h
+      value: im
       objectReference: {fileID: 0}
     - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
         type: 2}
       propertyPath: lineOverride.Array.data[2]
-      value: h
+      value: ghost
       objectReference: {fileID: 0}
     - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
         type: 2}
