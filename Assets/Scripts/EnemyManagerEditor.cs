@@ -22,7 +22,7 @@ public class EnemyManagerEditor : Editor
         messageCode = serializedObject.FindProperty("lines");
         messageOverride = serializedObject.FindProperty("lineOverride");
 
-        useManualLines = serializedObject.FindProperty();
+        useManualLines = serializedObject.FindProperty("useManualLines");
     }
 
     public override void OnInspectorGUI()
@@ -36,14 +36,14 @@ public class EnemyManagerEditor : Editor
         if (manualOverride)
             manualOverrideUI();
         else
-            useManualLines = false;
+            useManualLines.boolValue = false;
             
         serializedObject.ApplyModifiedProperties();
     }
 
     private void manualOverrideUI()
     {
-        useManualLines = true;
+        useManualLines.boolValue = true;
 
         // dropdown for the manual override ui
         menuOpened = EditorGUILayout.Foldout(menuOpened, "Override Lines");

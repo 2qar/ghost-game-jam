@@ -37,8 +37,9 @@ public static class PresetMessages
     /// <param name="lines">Line name.</param>
     public static Message GenerateMessage(string lines)
     {
-        if (lines.ToLower() == "start")
-            return StartGhostMessage();
+        if(lines != "")
+            if (lines.ToLower() == "start")
+                return StartGhostMessage();
 
         return new Message();
     }
