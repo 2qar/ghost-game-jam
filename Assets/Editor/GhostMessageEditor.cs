@@ -6,7 +6,7 @@ using UnityEditor;
 // FIXME: For some reason the inspector randomly doesn't draw anything
 
 // Deleting messages only works when count is 0
-
+/*
 [CustomEditor(typeof(GhostMessage))]
 public class GhostMessageEditor : Editor
 {
@@ -31,12 +31,10 @@ public class GhostMessageEditor : Editor
         messageListSize = EditorGUILayout.DelayedIntField("Messages", messageListSize);
         int messageCount = message.messages.Count;
 
-        /*
-        if (messageListSize < messageCount)
-            messageListSize = messageCount;
-        while (message.messages.Count < messageListSize)
-            message.messages.Add(new RealMessage());
-        */
+        //if (messageListSize < messageCount)
+          //  messageListSize = messageCount;
+        //while (message.messages.Count < messageListSize)
+            //message.messages.Add(new RealMessage());
 
         message.messages.Capacity = messageCount;
         while (message.messages.Count < messageListSize)
@@ -50,7 +48,7 @@ public class GhostMessageEditor : Editor
         // print all of the message elements
         for (int index = 0; index < message.messages.Capacity; index++)
         {
-            /*
+            #region comment
             Rect messageGroup = EditorGUILayout.BeginVertical();
             messageGroup.y = messageBoxHeight * (index + 1);
 
@@ -65,7 +63,7 @@ public class GhostMessageEditor : Editor
 
 
             EditorGUILayout.EndVertical();
-            */
+            #endregion
 
             message.messages[index].message = EditorGUILayout.DelayedTextField("Message " + (index + 1), message.messages[index].message);
             message.messages[index].playLength = EditorGUILayout.DelayedFloatField("Play Length", message.messages[index].playLength);
@@ -105,3 +103,4 @@ public class GhostMessageEditor : Editor
     }
 
 }
+*/

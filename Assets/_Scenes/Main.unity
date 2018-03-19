@@ -1692,8 +1692,13 @@ Prefab:
         type: 2}
       propertyPath: ghostMessage
       value: 
-      objectReference: {fileID: 11400000, guid: 1d0f39798a3047441a84f50a8ffe6573,
+      objectReference: {fileID: 11400000, guid: 5ae68fc8a7bd0437ea5e41dddfa66958,
         type: 2}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: fuckUnity
+      value: fuck unity
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0

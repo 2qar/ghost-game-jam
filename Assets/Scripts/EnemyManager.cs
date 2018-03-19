@@ -7,11 +7,10 @@ using UnityEngine;
 /// <summary>
 /// Manages a bunch of enemy stuff, like what lines to say, and whether to use manually written lines or not.
 /// </summary>
+//[ExecuteInEditMode]
 [System.Serializable]
-[ExecuteInEditMode]
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField]
     public GhostMessage ghostMessage;
 
     /*
