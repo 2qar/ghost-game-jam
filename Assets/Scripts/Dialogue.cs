@@ -62,7 +62,7 @@ public class Dialogue : MonoBehaviour
     /// <param name="focus">Focus.</param>
     /// <param name="playerMovement">Player movement.</param>
     /// <param name="talk">Talk.</param>
-    public void startConversation(Message dialogue, GameObject focus, PlayerMovement playerMovement, GhostTalk talk)
+    public void startConversation(GhostMessage dialogue, GameObject focus, PlayerMovement playerMovement, GhostTalk talk)
     {
         playerMover = playerMovement;
         talker = talk;
@@ -96,12 +96,12 @@ public class Dialogue : MonoBehaviour
     /// <param name="dialogue">
     /// A message for the ghost to say.
     /// </param>
-    private IEnumerator conversationInit(Message dialogue)
+    private IEnumerator conversationInit(GhostMessage dialogue)
     {
         follower.ghostConversation(focusPoint);
 
         // run through each of the lines of dialogue for the ghost to say
-        for (int index = 0; index < dialogue.messages.Length; index++)
+        for (int index = 0; index < dialogue.messages.Count; index++)
         {
             skipDialogue = false;
             nextLine = false;
@@ -109,7 +109,7 @@ public class Dialogue : MonoBehaviour
             endOfLine = false;
 
             // convert the current line to a list of chars
-            char[] lineLetters = dialogue.messages[index].ToCharArray();
+            char[] lineLetters = dialogue.messages[index].message.ToCharArray();
             
             // slowly fill the current line in using these chars
             for (int letter = 0; letter < lineLetters.Length; letter++)
@@ -123,9 +123,9 @@ public class Dialogue : MonoBehaviour
                 }
 
                 PrintedDialogue += lineLetters[letter];
-                dialogueText.fontSize = dialogue.messageSize[index];
+                dialogueText.fontSize = dialogue.messages[index].size;
 
-                yield return new WaitForSeconds(dialogue.messagePlayLength[index]);
+                yield return new WaitForSeconds(dialogue.messages[index].playLength);
             }
 
             // update the status of the dialogue so the player now has a chance to go to the next line

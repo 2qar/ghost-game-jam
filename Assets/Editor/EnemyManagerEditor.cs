@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEditor;
 
 // FIXME: Values in the inspector aren't used in the built version of the game
+    // that's because this script isn't running in the built version of the game you idiot
+    // this probably can't be fixed, but making messages a serializable object is a nice way of getting around this even if it is kinda messy
 // TODO: Instead of hiding the message override and soon the other message properties when manual override is off, make them locked
 
 // TODO: Rewrite without serialized properties if possible
@@ -10,6 +12,7 @@ using UnityEditor;
 /// <summary>
 /// Custom inspector for the EnemyManager class.
 /// </summary>
+/*
 [CustomEditor(typeof(EnemyManager))]
 public class EnemyManagerEditor : Editor
 {
@@ -86,3 +89,21 @@ public class EnemyManagerEditor : Editor
     }
 
 }
+*/
+/*
+[CustomEditor(typeof(EnemyManager))]
+public class EnemyManagerEditor : Editor
+{
+    EnemyManager enemy;
+
+    private void Awake()
+    {
+        enemy = (EnemyManager)target;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        enemy.ghostMessage = EditorGUILayout.ObjectField("Message", enemy.ghostMessage, typeof(GhostMessage)) as GhostMessage;
+    }
+}
+*/

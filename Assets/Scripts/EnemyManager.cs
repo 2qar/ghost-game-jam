@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// FIXME: GhostMessage field getting cleared when the game builds
+
 /// <summary>
 /// Manages a bunch of enemy stuff, like what lines to say, and whether to use manually written lines or not.
 /// </summary>
@@ -9,6 +11,10 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class EnemyManager : MonoBehaviour
 {
+    [SerializeField]
+    public GhostMessage ghostMessage;
+
+    /*
     // line code that grabs a certain message from presetmessages
     public string lines;
 
@@ -38,13 +44,11 @@ public class EnemyManager : MonoBehaviour
 
     // only exists because i don't know how to save stuff that isn't a serializedproperty
     public bool menuOpened;
-
+    */
 	// Use this for initialization
 	void Start ()
     {
-        // generate a message for the ghost and give it to the ghost by default
-        generatedMessage = PresetMessages.GenerateMessage(lines);
-        //message = generatedMessage;
+        Debug.Log(name + " : " + ghostMessage);
 	}
 	
 	// Update is called once per frame
@@ -52,5 +56,4 @@ public class EnemyManager : MonoBehaviour
     {
         
     }
-
 }

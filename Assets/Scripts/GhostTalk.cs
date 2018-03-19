@@ -73,7 +73,7 @@ public class GhostTalk : MonoBehaviour
         Dialogue dialogue = focus.AddComponent<Dialogue>();
 
         // get the message for the ghost to say based on the lines they have on their manager
-        Message ghostMessage = scaryghost.GetComponent<EnemyManager>().message;
+        GhostMessage ghostMessage = scaryghost.GetComponent<EnemyManager>().ghostMessage;
 
         // start the conversation now that a bunch of stuff is set up
         dialogue.startConversation(ghostMessage, focus, playerMovement, this);

@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 129175783}
   - component: {fileID: 129175780}
   - component: {fileID: 129175782}
+  - component: {fileID: 129175784}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -280,6 +281,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ghost: {fileID: 0}
   talkingToGhost: 0
+--- !u!114 &129175784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 129175776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cfe4dbc1e34e43c5a522bb1079211a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &579636602
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,6 +1688,12 @@ Prefab:
       propertyPath: menuOpened
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: ghostMessage
+      value: 
+      objectReference: {fileID: 11400000, guid: 1d0f39798a3047441a84f50a8ffe6573,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0

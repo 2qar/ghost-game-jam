@@ -1,11 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 /// <summary>
 /// Create a message with properties like length to play a message and the size for each message.
 /// </summary>
+[System.Serializable]
 public class Message
 {
     public string[] messages;
@@ -19,7 +20,10 @@ public class Message
     // create an empty message
     public Message()
     {
-        new Message(new string[0], new float[0], new int[0]);
+        messages = new string[0];
+
+        initializeDefaultSize();
+        initializeDefaultLength();
     }
 
     // create a message w/ default size and length
@@ -77,6 +81,7 @@ public class Message
 
 }
 
+[System.Serializable]
 public class RealMessage
 {
     public string message;
@@ -92,92 +97,8 @@ public class RealMessage
 }
 
 [CreateAssetMenu(fileName = "GhostMessage", menuName = "Ghost Message")]
+[System.Serializable]
 public class GhostMessage : ScriptableObject
 {
     public List<RealMessage> messages = new List<RealMessage>();
-}
-
-// FIXME: Fix the list not decreasing in size ever
-
-[CustomEditor(typeof(GhostMessage))]
-public class GhostMessageEditor : Editor
-{
-    GhostMessage message;
-
-    int messageListSize;
-
-    private void Awake()
-    {
-        message = (GhostMessage)target;
-    }
-
-    public override void OnInspectorGUI()
-    {
-        displayMessages();
-    }
-
-    private void displayMessages()
-    {
-        // pick how many messages to have
-        messageListSize = EditorGUILayout.DelayedIntField("Messages", messageListSize);
-        int messageCount = message.messages.Count;
-        if (messageListSize < messageCount)
-            messageListSize = messageCount;
-        while (message.messages.Count < messageListSize)
-            message.messages.Add(new RealMessage());
-
-        int messageBoxHeight = 60;
-        EditorGUILayout.Space();
-
-        Debug.Log(message.messages.Count);
-
-        // print all of the message elements
-        for (int index = 0; index < message.messages.Count; index++)
-        {
-            /*
-            Rect messageGroup = EditorGUILayout.BeginVertical();
-            messageGroup.y = messageBoxHeight * (index + 1);
-
-            Rect messageRect = createMessageBox(messageGroup);
-
-            message.messages[index] = EditorGUI.DelayedTextField(messageRect, "Message " + (index + 1), message.messages[index]);
-
-            Rect playLengthRect = messageRect;
-            playLengthRect.y += 15;
-
-            message.messagePlayLength[index] = EditorGUI.DelayedFloatField(playLengthRect, message.messagePlayLength[index]);
-
-
-            EditorGUILayout.EndVertical();
-            */
-
-            message.messages[index].message = EditorGUILayout.DelayedTextField("Message " + (index + 1), message.messages[index].message);
-            message.messages[index].playLength = EditorGUILayout.DelayedFloatField("Play Length", message.messages[index].playLength);
-            message.messages[index].size = EditorGUILayout.DelayedIntField("Size", message.messages[index].size);
-
-            if(GUILayout.Button("Delete Message"))
-            {
-                if(!(index >= message.messages.Count))
-                    message.messages.RemoveAt(index);
-            }
-
-            message.messages.TrimExcess();
-            EditorGUILayout.Space();
-        }
-
-        //EditorGUILayout.EndVertical();
-
-    }
-
-    private Rect createMessageBox(Rect messageGroup)
-    {
-        Rect messageRect = messageGroup;
-        messageRect.x += 20;
-        messageRect.y += 15;
-        messageRect.width -= 20;
-        messageRect.height = 16;
-
-        return messageRect;
-    }
-
 }
