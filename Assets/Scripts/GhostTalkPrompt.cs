@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// FIXME: The talk prompt shows even when the player is looking away from the ghost
 // TODO: Maybe add some pink to the text prompts
 
 /// <summary>

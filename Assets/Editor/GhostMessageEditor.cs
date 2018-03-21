@@ -6,8 +6,8 @@ using UnityEditor;
 // FIXME: For some reason the inspector randomly doesn't draw anything
 
 // Deleting messages only works when count is 0
-/*
 [CustomEditor(typeof(GhostMessage))]
+[System.Serializable]
 public class GhostMessageEditor : Editor
 {
     GhostMessage message;
@@ -48,7 +48,7 @@ public class GhostMessageEditor : Editor
         // print all of the message elements
         for (int index = 0; index < message.messages.Capacity; index++)
         {
-            #region comment
+            /*#region comment
             Rect messageGroup = EditorGUILayout.BeginVertical();
             messageGroup.y = messageBoxHeight * (index + 1);
 
@@ -63,7 +63,7 @@ public class GhostMessageEditor : Editor
 
 
             EditorGUILayout.EndVertical();
-            #endregion
+            #endregion*/
 
             message.messages[index].message = EditorGUILayout.DelayedTextField("Message " + (index + 1), message.messages[index].message);
             message.messages[index].playLength = EditorGUILayout.DelayedFloatField("Play Length", message.messages[index].playLength);
@@ -103,4 +103,3 @@ public class GhostMessageEditor : Editor
     }
 
 }
-*/

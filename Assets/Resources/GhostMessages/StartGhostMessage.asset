@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eea19b1aab344a5aa23c892e8894572, type: 3}
+  m_Name: StartGhostMessage
+  m_EditorClassIdentifier: 
+  messages:
+  - message: hello
+    playLength: 0.1
+    size: 50
+  - message: welcome to heck
+    playLength: 0.1
+    size: 50
+  - message: you gotta find your body
+    playLength: 0.1
+    size: 50
+  - message: if you wanna leave
+    playLength: 0.1
+    size: 50
+  - message: but you can stay if you want
+    playLength: 0.1
+    size: 50
+  - message: i could use a pal
+    playLength: 0.1
+    size: 50
+  - message: oh well
+    playLength: 0.1
+    size: 50
+  - message: have fun
+    playLength: 0.1
+    size: 50
+  - message: i guess
+    playLength: 0.2
+    size: 35

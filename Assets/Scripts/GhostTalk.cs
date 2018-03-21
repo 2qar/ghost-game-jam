@@ -12,10 +12,13 @@ public class GhostTalk : MonoBehaviour
     public Collider2D ghost;
 
     SpriteRenderer sr;
+
     PlayerMovement playerMovement;
 
     [HideInInspector]
     public bool talkingToGhost;
+
+    GhostTalkPrompt lastPrompt;
 
 	// Use this for initialization
 	void Awake ()
@@ -43,8 +46,26 @@ public class GhostTalk : MonoBehaviour
 
         // if the ghost collider actually exists and actually is a ghost, the player can talk to a ghost
         if (ghost != null)
+        {
+            // TODO: Remove colliders that check to enable talk prompt on ghosts
             if (ghost.gameObject.tag == "Ghost")
+            {
                 canTalkToGhost = true;
+                hideTalkPrompt();
+                lastPrompt = ghost.gameObject.GetComponentInChildren<GhostTalkPrompt>();
+                lastPrompt.ShowTalkPrompt = true;
+            }
+            // if the raycast hits something else, hide the talk prompt
+            else
+                hideTalkPrompt();
+        }
+        // if the collider doesn't even exist, hide text prompt
+        else
+            hideTalkPrompt();
+
+        // if the player is talking to a ghost right now, hide the talk prompt
+        if (talkingToGhost)
+            lastPrompt.ShowTalkPrompt = false;
 
         // if the player can talk to a ghost and they press the talk key, guess what happens
         if (canTalkToGhost && Input.GetKeyDown(KeyCode.Z) && !talkingToGhost)
@@ -134,6 +155,15 @@ public class GhostTalk : MonoBehaviour
 
         // the collider that the player's ray hits
         return Physics2D.Raycast(transform.position, direction, 13, playerMask).collider;
+    }
+
+    /// <summary>
+    /// Hides the ghost's talk prompt.
+    /// </summary>
+    void hideTalkPrompt()
+    {
+        if (lastPrompt != null)
+            lastPrompt.ShowTalkPrompt = false;
     }
 
 }

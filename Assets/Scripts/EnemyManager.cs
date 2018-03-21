@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// FIXME: GhostMessage field getting cleared when the game builds
-
 /// <summary>
 /// Manages a bunch of enemy stuff, like what lines to say, and whether to use manually written lines or not.
 /// </summary>
@@ -47,7 +45,14 @@ public class EnemyManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        Debug.Log(name + " : " + ghostMessage);
+        // TODO: Rewrite this so that it picks a random message every time the player talks to this ghost
+            // Make the dialogue thing check if the message is null; if it's null, pick a random message
+        // if no message is given, generate a random message
+        if(ghostMessage == null)
+        {
+            ghostMessage = new GhostMessage();
+            ghostMessage.AddRandomMessage();
+        }
 	}
 	
 	// Update is called once per frame
