@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 223052809644972302}
   - component: {fileID: 61421546614104044}
   - component: {fileID: 114232444129918260}
+  - component: {fileID: 114687580960341422}
   m_Layer: 9
   m_Name: TalkPrompt
   m_TagString: Untagged
@@ -196,6 +197,20 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: '[Z]'
+--- !u!114 &114687580960341422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1898302212664538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.56078434, b: 0.86274517, a: 1}
+  m_EffectDistance: {x: 1, y: -6.5}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114714495140719542
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,6 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghostMessage: {fileID: 0}
+  moveSpeed: 0
 --- !u!212 &212705075806397772
 SpriteRenderer:
   m_ObjectHideFlags: 1

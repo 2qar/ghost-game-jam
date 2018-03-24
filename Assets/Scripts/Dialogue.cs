@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// TODO: Make this static 
+// TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermover
+
 /// <summary>
 /// sets up a nice conversation with a friendly ghosty boye
 /// </summary>
@@ -31,11 +34,11 @@ public class Dialogue : MonoBehaviour
 
     GameObject textObject;
     Text dialogueText;
+    Shadow textShadow;
 
     private void Awake()
     {
         follower = FindObjectOfType<CameraFollower>();
-        
     }
 
     // bunch of conversation stuff
@@ -83,6 +86,7 @@ public class Dialogue : MonoBehaviour
 
         // snatch the text component of the ghost's dialogue bubble so it can be changed
         dialogueText = textObject.GetComponent<Text>();
+        textShadow = textObject.GetComponent<Shadow>();
 
         // actually start the conversation now that we have a text bubble to show what the ghost is saying
         StartCoroutine(conversationInit(dialogue));
@@ -100,6 +104,13 @@ public class Dialogue : MonoBehaviour
     {
         follower.ghostConversation(focusPoint);
 
+        // if the ghost being talked to wasn't assigned a message, pick a random one
+        if(dialogue == null)
+        {
+            dialogue = new GhostMessage();
+            dialogue.AddRandomMessage();
+        }
+
         // run through each of the lines of dialogue for the ghost to say
         for (int index = 0; index < dialogue.messages.Count; index++)
         {
@@ -110,7 +121,8 @@ public class Dialogue : MonoBehaviour
 
             // convert the current line to a list of chars
             char[] lineLetters = dialogue.messages[index].message.ToCharArray();
-            
+            textShadow.effectDistance = new Vector2(0, dialogue.messages[index].size / -7.69f);
+
             // slowly fill the current line in using these chars
             for (int letter = 0; letter < lineLetters.Length; letter++)
             {

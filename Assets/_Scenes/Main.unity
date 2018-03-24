@@ -336,6 +336,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 50936802379562154, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0
@@ -1597,6 +1607,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 50936802379562154, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0
@@ -1802,6 +1822,16 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 50936802379562154, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0
@@ -1817,6 +1847,7 @@ GameObject:
   - component: {fileID: 1308350130}
   - component: {fileID: 1308350129}
   - component: {fileID: 1308350128}
+  - component: {fileID: 1308350133}
   m_Layer: 0
   m_Name: jump
   m_TagString: Untagged
@@ -1917,6 +1948,20 @@ RectTransform:
   m_AnchoredPosition: {x: 44.1, y: 2.2}
   m_SizeDelta: {x: 84.9, y: 27.9}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1308350133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1308350127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1573420865, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 0.56078434, b: 0.86274517, a: 1}
+  m_EffectDistance: {x: 1, y: -6.5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1467238317
 GameObject:
   m_ObjectHideFlags: 0
@@ -13485,6 +13530,8 @@ GameObject:
   - component: {fileID: 1974804864}
   - component: {fileID: 1974804863}
   - component: {fileID: 1974804865}
+  - component: {fileID: 1974804867}
+  - component: {fileID: 1974804866}
   m_Layer: 8
   m_Name: Walls
   m_TagString: Untagged
@@ -14471,8 +14518,104 @@ TilemapCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
+  m_UsedByComposite: 1
+  m_Offset: {x: 0, y: 0}
+--- !u!66 &1974804866
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1974804861}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1974804865}
+    m_ColliderPaths:
+    - - X: 240000000
+        Y: -160000000
+      - X: -400000000
+        Y: -160000000
+      - X: -400000000
+        Y: 160000000
+      - X: 1520000000
+        Y: 160000000
+      - X: 1520000000
+        Y: 240000000
+      - X: 480000000
+        Y: 240000000
+      - X: 480000000
+        Y: 400000000
+      - X: -480000000
+        Y: 400000000
+      - X: -480000000
+        Y: -400000000
+      - X: 240000000
+        Y: -400000000
+    - - X: 800000000
+        Y: -160000000
+      - X: 720000000
+        Y: -160000000
+      - X: 720000000
+        Y: -560000000
+      - X: 800000000
+        Y: -560000000
+    - - X: 2560000000
+        Y: -320000000
+      - X: 2480000000
+        Y: -320000000
+      - X: 2480000000
+        Y: -480000000
+      - X: 2560000000
+        Y: -480000000
+  m_CompositePaths:
+    m_Paths:
+    - - {x: 24, y: -16}
+      - {x: -40, y: -16}
+      - {x: -40, y: 16}
+      - {x: 152, y: 16}
+      - {x: 152, y: 24}
+      - {x: 48, y: 24}
+      - {x: 48, y: 40}
+      - {x: -48, y: 40}
+      - {x: -48, y: -40}
+      - {x: 24, y: -40}
+    - - {x: 80, y: -16}
+      - {x: 72, y: -16}
+      - {x: 72, y: -56}
+      - {x: 80, y: -56}
+    - - {x: 256, y: -32}
+      - {x: 248, y: -32}
+      - {x: 248, y: -48}
+      - {x: 256, y: -48}
+  m_VertexDistance: 0.0005
+--- !u!50 &1974804867
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1974804861}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &2002562076
 Prefab:
   m_ObjectHideFlags: 0
@@ -14665,6 +14808,16 @@ Prefab:
       value: 
       objectReference: {fileID: 11400000, guid: 64462f8cd397b4f098bb097ab7e03db5,
         type: 2}
+    - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 50936802379562154, guid: fce75aed445284477aba7ccb321c2d65,
+        type: 2}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
   m_IsPrefabParent: 0

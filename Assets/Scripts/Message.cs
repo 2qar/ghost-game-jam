@@ -1,7 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
 
 /// <summary>
 /// Create a message with properties like length to play a message and the size for each message.

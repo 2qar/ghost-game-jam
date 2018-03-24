@@ -18,8 +18,8 @@ MonoBehaviour:
   - message: hello
     playLength: 0.1
     size: 50
-  - message: h
-    playLength: 0.1
+  - message: that's a really funny joke, can you just keep repeating "h" please?
+    playLength: 0.05
     size: 50
   - message: hey
     playLength: 0.1

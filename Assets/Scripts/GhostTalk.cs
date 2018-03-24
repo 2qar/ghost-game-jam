@@ -47,10 +47,10 @@ public class GhostTalk : MonoBehaviour
         // if the ghost collider actually exists and actually is a ghost, the player can talk to a ghost
         if (ghost != null)
         {
-            // TODO: Remove colliders that check to enable talk prompt on ghosts
             if (ghost.gameObject.tag == "Ghost")
             {
-                canTalkToGhost = true;
+                if(!ghost.gameObject.GetComponent<EnemyManager>().Angery)
+                    canTalkToGhost = true;
                 hideTalkPrompt();
                 lastPrompt = ghost.gameObject.GetComponentInChildren<GhostTalkPrompt>();
                 lastPrompt.ShowTalkPrompt = true;
@@ -62,6 +62,8 @@ public class GhostTalk : MonoBehaviour
         // if the collider doesn't even exist, hide text prompt
         else
             hideTalkPrompt();
+
+
 
         // if the player is talking to a ghost right now, hide the talk prompt
         if (talkingToGhost)
@@ -83,10 +85,7 @@ public class GhostTalk : MonoBehaviour
 
         // make the ghost face the player for the conversation like a polite boy
         SpriteRenderer ghostSr = scaryghost.GetComponent<SpriteRenderer>();
-        if (sr.flipX)
-            ghostSr.flipX = false;
-        else
-            ghostSr.flipX = true;
+        ghostSr.flipX = !sr.flipX;
 
         GameObject focus = createFocusPoint(scaryghost, transform);
 

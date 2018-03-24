@@ -37,10 +37,7 @@ public class GhostTalkPrompt : MonoBehaviour
         gameObject.layer = 9;
     }
 
-    // when the player enters the trigger zone, show the text.
-    // when the player leaves the trigger zone, hide the text.
-    // when the player is just standing in the trigger zone, hide the text if they're talking to a ghost.
-
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -52,19 +49,15 @@ public class GhostTalkPrompt : MonoBehaviour
         if (collision.gameObject.tag == "Player")
             ShowTalkPrompt = false;
     }
-    
     private void OnTriggerStay2D(Collider2D collision)
     {
         // if the player is in the collider but already talking to a ghost, hide the prompt
         if (collision.gameObject.tag == "Player" && GhostTalk.instance.talkingToGhost)
             ShowTalkPrompt = false;
         // if the player is in the collider but they're not looking at the ghost, hide the prompt
-        /*
-        else if (collision.gameObject.tag == "Player" && GhostTalk.instance.ghost.name != name)
-            ShowTalkPrompt = false;
-            */
         else
             ShowTalkPrompt = true;
     }
+    */
 
 }
