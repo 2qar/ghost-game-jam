@@ -40,7 +40,7 @@ public class GhostMessageEditor : Editor
         while (message.messages.Count < messageListSize)
             message.messages.Add(new RealMessage());
 
-        int messageBoxHeight = 60;
+        //int messageBoxHeight = 60;
         EditorGUILayout.Space();
 
         Debug.Log("Message Count : " + message.messages.Count);

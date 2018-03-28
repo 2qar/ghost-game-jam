@@ -1,8 +1,11 @@
 using UnityEngine;
 
+// TODO: Remove Message in favor of RealMessage because RealMessage makes more sense
+
 /// <summary>
 /// Create a message with properties like length to play a message and the size for each message.
 /// </summary>
+/*
 [System.Serializable]
 public class Message
 {
@@ -77,18 +80,25 @@ public class Message
     }
 
 }
+*/
 
+/// <summary>
+/// A message to be said by a ghost; has its own text, play length, and text size properties.
+/// </summary>
 [System.Serializable]
 public class RealMessage
 {
+    public const float DefaultLength = .1f;
+    public const int DefaultSize = 50;
+
     public string message;
     public float playLength;
     public int size;
 
     public RealMessage()
     {
-        playLength = Message.DefaultLength;
-        size = Message.DefaultSize;
+        playLength = DefaultLength;
+        size = size = DefaultSize;
     }
 
 }

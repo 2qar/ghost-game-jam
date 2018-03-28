@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // TODO: Make this static 
-// TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermover
+// TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermove
 
 /// <summary>
 /// sets up a nice conversation with a friendly ghosty boye

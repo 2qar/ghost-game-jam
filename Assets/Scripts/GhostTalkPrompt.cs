@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO: Maybe add some pink to the text prompts
+// TODO: Add this to the ghost gameobject instead of putting it on a seperate object
 
 /// <summary>
 /// Show and hide the ghost's talk prompt when the player gets close enough.
@@ -36,28 +36,5 @@ public class GhostTalkPrompt : MonoBehaviour
         // change the layer that the trigger zone will be on so that the player's jump raycast stuff doesn't break
         gameObject.layer = 9;
     }
-
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-            ShowTalkPrompt = true;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-            ShowTalkPrompt = false;
-    }
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        // if the player is in the collider but already talking to a ghost, hide the prompt
-        if (collision.gameObject.tag == "Player" && GhostTalk.instance.talkingToGhost)
-            ShowTalkPrompt = false;
-        // if the player is in the collider but they're not looking at the ghost, hide the prompt
-        else
-            ShowTalkPrompt = true;
-    }
-    */
 
 }
