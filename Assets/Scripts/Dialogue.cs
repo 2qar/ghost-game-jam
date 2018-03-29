@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// FIXME: Make the ghost stop moving when the player is talking to it
 // TODO: Make this static 
 // TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermove
 
@@ -88,6 +89,9 @@ public class Dialogue : MonoBehaviour
         dialogueText = textObject.GetComponent<Text>();
         textShadow = textObject.GetComponent<Shadow>();
 
+        // make the ghost be a polite boye and stop walking
+        talk.ghost.GetComponent<EnemyManager>().StopCoroutine("walk");
+
         // actually start the conversation now that we have a text bubble to show what the ghost is saying
         StartCoroutine(conversationInit(dialogue));
     }
@@ -160,6 +164,7 @@ public class Dialogue : MonoBehaviour
     /// </summary>
     private void endConversation()
     {
+        talker.ghost.GetComponent<EnemyManager>().StartCoroutine("walk");
         follower.endGhostConversation(gameObject);
         playerMover.enabled = true;
         talker.talkingToGhost = false;

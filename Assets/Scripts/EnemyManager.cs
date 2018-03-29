@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Find a way to ignore the player and the enemy layers at the same time
-
 /* TODO: Finish raycasting for the enemy AI
  * - Make all of the values negative when the enemy is flipped so all of the rays are actually in the right spot
- * - Get the playermask info so the enemy can ignore that when they're shooting rays
  */
 
 /// <summary>
@@ -50,8 +47,7 @@ public class EnemyManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        walls = 1 << LayerMask.NameToLayer("Platform");
-        //player = ~player;
+        walls = 1 << LayerMask.NameToLayer("Platforms");
 
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -62,7 +58,7 @@ public class EnemyManager : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         moveLeft = randomBoolValue();
-        StartCoroutine(move());
+        StartCoroutine(walk());
 	}
 	
 	// Update is called once per frame
@@ -74,20 +70,6 @@ public class EnemyManager : MonoBehaviour
             pursuitAI();
         else
             calmAI();
-    }
-
-    IEnumerator move()
-    {
-        if (moveLeft)
-            movement.x = -moveSpeed;
-        else
-            movement.x = moveSpeed;
-        yield return new WaitForSeconds(2f);
-
-        yield return new WaitForSeconds(3f);
-        moveLeft = !moveLeft;
-        move();
-        yield break;
     }
 
     private bool randomBoolValue()
@@ -106,6 +88,7 @@ public class EnemyManager : MonoBehaviour
         
     }
 
+    // note to self: might not actually need to use a silly lil method for making our ghosty boye walk
     /// <summary>
     /// Bunch o raycasting for calm ghosts that like long walks on the beach and
     /// talking about their feelings
@@ -147,10 +130,34 @@ public class EnemyManager : MonoBehaviour
             direction = Vector2.left;
 
         RaycastHit2D ray = Physics2D.Raycast(transform.position, direction, distance, walls);
+
         if (ray.collider != null)
             return true;
-        Debug.Log(ray.collider);
         return false;
+    }
+
+    /// <summary>
+    /// make the lil ghosty boye walk BUT stop if there's a wall ahead so he doesn't scronch into it
+    /// </summary>
+    /// <param name="flipped">determines whether the ghosty boye is flipped or not</param>
+    private IEnumerator walk()
+    {
+        sr.flipX = moveLeft;
+        while(!wallCheck())
+        {
+            float velocity = 15f;
+            if (sr.flipX)
+                velocity *= -1;
+            rb.velocity = new Vector2(velocity, rb.velocity.y);
+            yield return new WaitForSeconds(0.001f);
+        }
+
+        rb.velocity = new Vector2(0, 0);
+        yield return new WaitForSeconds(3f);
+
+        moveLeft = !moveLeft;
+        StartCoroutine(walk());
+        yield break;
     }
 
     private bool pitCheck()
