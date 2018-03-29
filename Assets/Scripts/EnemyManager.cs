@@ -4,6 +4,7 @@ using UnityEngine;
 
 /* TODO: Finish raycasting for the enemy AI
  * - Make all of the values negative when the enemy is flipped so all of the rays are actually in the right spot
+ * - Maybe make the raycast methods return the raycasthit info stuff instead of just a true or false cus i kinda need to use some of the other information
  */
 
 /// <summary>
@@ -38,7 +39,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     bool moveLeft;
-    Vector2 movement;
+    //Vector2 movement;
     public float moveSpeed;
     Rigidbody2D rb;
 
@@ -66,10 +67,12 @@ public class EnemyManager : MonoBehaviour
     {
         //rb.velocity = movement;
 
+        /*
         if (angery)
             pursuitAI();
         else
             calmAI();
+        */
     }
 
     private bool randomBoolValue()
@@ -80,6 +83,7 @@ public class EnemyManager : MonoBehaviour
             return false;
     }
 
+    // maybe get rid of this guy right here
     /// <summary>
     /// Does a bunch of raycasting so that the enemy doesn't stumble in chases
     /// </summary>
@@ -95,9 +99,13 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private void calmAI()
     {
-        Debug.Log(wallCheck());
+        
     }
 
+    /// <summary>
+    /// Checks for a high wall for the ghosty boye to jump on
+    /// </summary>
+    /// <returns>is there a wall????</returns>
     private float highWall()
     {
         // min offset: (24, 16)
@@ -110,14 +118,27 @@ public class EnemyManager : MonoBehaviour
         return ray.distance;
     }
 
+    /// <summary>
+    /// checks for a smol woll for the ghosty boye to hop up on all scronched-like
+    /// </summary>
+    /// <returns>is there a tiny lil baby wall????</returns>
     private float lowWall()
     {
         // min offset: (48, 8)
-        Vector3 offset = new Vector3(48, 8);
+        float distance = 48;
+        if (sr.flipX)
+            distance *= -1;
+
+        Vector3 offset = new Vector3(distance, 8);
         RaycastHit2D ray = Physics2D.Raycast(transform.position + offset, Vector2.down, 4, walls);
         return ray.distance;
     }
 
+    // TODO: Maybe get rid of this method and instead check if the high wall check distance is high enough for it to be hitting the ground
+    /// <summary>
+    /// checks if there's a big ol wall in front of the ghosty boye to avoid hitting
+    /// </summary>
+    /// <returns>is there a wall????</returns>
     private bool wallCheck()
     {
         // minimum distance between the enemy and a wall of height 2 where the enemy can jump
@@ -136,12 +157,13 @@ public class EnemyManager : MonoBehaviour
         return false;
     }
 
+    // TODO: Make the ghost walk a random distance or smth so he seems smart :)
     /// <summary>
-    /// make the lil ghosty boye walk BUT stop if there's a wall ahead so he doesn't scronch into it
+    /// make the lil ghosty boye walk BUT stop for walls in the way
     /// </summary>
-    /// <param name="flipped">determines whether the ghosty boye is flipped or not</param>
     private IEnumerator walk()
     {
+        // make the ghost face the correct direction and move until he finds a wall
         sr.flipX = moveLeft;
         while(!wallCheck())
         {
@@ -152,9 +174,11 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
 
+        // stop the ghost and wait
         rb.velocity = new Vector2(0, 0);
         yield return new WaitForSeconds(3f);
 
+        // start moving but in the opposite direction
         moveLeft = !moveLeft;
         StartCoroutine(walk());
         yield break;

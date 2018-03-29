@@ -96,7 +96,7 @@ public class GhostTalk : MonoBehaviour
         GhostMessage ghostMessage = scaryghost.GetComponent<EnemyManager>().ghostMessage;
 
         // start the conversation now that a bunch of stuff is set up
-        dialogue.startConversation(ghostMessage, focus, playerMovement, this);
+        dialogue.startConversation(ghostMessage, focus, playerMovement);
     }
 
     /// <summary>
