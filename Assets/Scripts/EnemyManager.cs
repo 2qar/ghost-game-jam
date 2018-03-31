@@ -23,6 +23,8 @@ public class EnemyManager : MonoBehaviour
     RuntimeAnimatorController enemy;
     RuntimeAnimatorController angryEnemy;
 
+    Vector2 playerPosition;
+
     private bool angery;
     public bool Angery
     {
@@ -30,9 +32,18 @@ public class EnemyManager : MonoBehaviour
         set
         {
             if (value)
+            {
                 animator.runtimeAnimatorController = angryEnemy;
+                StartCoroutine(pursuit());
+            }
+                
             else
+            {
+                // play the normal enemy walk and roam
                 animator.runtimeAnimatorController = enemy;
+                StartCoroutine(walk());
+            }
+                
 
             angery = value;
         }
@@ -48,6 +59,8 @@ public class EnemyManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        playerPosition = GhostTalk.instance.transform.position;
+
         walls = 1 << LayerMask.NameToLayer("Platforms");
 
         animator = GetComponent<Animator>();
@@ -87,20 +100,25 @@ public class EnemyManager : MonoBehaviour
     /// <summary>
     /// Does a bunch of raycasting so that the enemy doesn't stumble in chases
     /// </summary>
+    /*
     private void pursuitAI()
     {
         
     }
+     */
+    
 
     // note to self: might not actually need to use a silly lil method for making our ghosty boye walk
     /// <summary>
     /// Bunch o raycasting for calm ghosts that like long walks on the beach and
     /// talking about their feelings
     /// </summary>
+    /* 
     private void calmAI()
     {
         
     }
+    */
 
     /// <summary>
     /// Checks for a high wall for the ghosty boye to jump on
@@ -182,6 +200,16 @@ public class EnemyManager : MonoBehaviour
         moveLeft = !moveLeft;
         StartCoroutine(walk());
         yield break;
+    }
+
+    private IEnumerator pursuit()
+    {
+        sr.flipX = moveLeft;
+
+        float velocity = 18f;
+
+        if (transform.position.x < playerPosition.x)
+            velocity *= -1;
     }
 
     private bool pitCheck()
