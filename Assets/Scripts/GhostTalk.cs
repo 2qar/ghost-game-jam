@@ -44,13 +44,12 @@ public class GhostTalk : MonoBehaviour
 
         bool canTalkToGhost = false;
 
-        // if the ghost collider actually exists and actually is a ghost, the player can talk to a ghost
+        // if the ghost is a ghost and they're not angry, let the player talk
         if (ghost != null)
         {
-            if (ghost.gameObject.tag == "Ghost")
+            if (ghost.gameObject.tag == "Ghost" && !ghost.gameObject.GetComponent<EnemyManager>().Angery)
             {
-                if(!ghost.gameObject.GetComponent<EnemyManager>().Angery)
-                    canTalkToGhost = true;
+                canTalkToGhost = true;
                 hideTalkPrompt();
                 lastPrompt = ghost.gameObject.GetComponentInChildren<GhostTalkPrompt>();
                 lastPrompt.ShowTalkPrompt = true;

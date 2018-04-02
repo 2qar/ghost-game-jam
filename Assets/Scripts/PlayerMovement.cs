@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// FIXME: Player can sometimes do a double jump off of a friendly ghost's head if they spam spacebar fast enough
 // TODO: Maybe make two seperate controllers for the ghost player and the human player
 
 public class PlayerMovement : MonoBehaviour

@@ -34,6 +34,7 @@ public class EnemyManager : MonoBehaviour
             if (value)
             {
                 animator.runtimeAnimatorController = angryEnemy;
+                StopAllCoroutines();
                 StartCoroutine(pursuit());
             }
                 
@@ -41,6 +42,7 @@ public class EnemyManager : MonoBehaviour
             {
                 // play the normal enemy walk and roam
                 animator.runtimeAnimatorController = enemy;
+                StopAllCoroutines();
                 StartCoroutine(walk());
             }
                 
@@ -73,6 +75,7 @@ public class EnemyManager : MonoBehaviour
 
         moveLeft = randomBoolValue();
         StartCoroutine(walk());
+        Angery = true;
 	}
 	
 	// Update is called once per frame
@@ -127,7 +130,7 @@ public class EnemyManager : MonoBehaviour
     private float highWall()
     {
         // min offset: (24, 16)
-        float distance = 24;
+        float distance = 20;
         if (sr.flipX)
             distance *= -1;
 
@@ -189,7 +192,7 @@ public class EnemyManager : MonoBehaviour
             if (sr.flipX)
                 velocity *= -1;
             rb.velocity = new Vector2(velocity, rb.velocity.y);
-            yield return new WaitForSeconds(0.001f);
+            yield return null;
         }
 
         // stop the ghost and wait
@@ -207,9 +210,36 @@ public class EnemyManager : MonoBehaviour
         sr.flipX = moveLeft;
 
         float velocity = 18f;
+        float negative = velocity * -1;
+        Vector2 movement = new Vector2();
 
-        if (transform.position.x < playerPosition.x)
-            velocity *= -1;
+        while(true)
+        {
+            // move in the right direction based on where the player is at
+            if (transform.position.x > playerPosition.x)
+            {
+                movement.x = negative;
+                sr.flipX = true;
+            }
+            else
+            {
+                movement.x = velocity;
+                sr.flipX = false;
+            }
+            // make it so the ghost won't get stuck floating in air when applying movement 
+            movement.y = rb.velocity.y;
+
+            rb.velocity = movement;
+
+            // if there is a wall in the way, jump
+            if (wallCheck() && Mathf.Round(highWall()) == 4)
+                rb.velocity = new Vector2(rb.velocity.x, 10);
+
+            // get an updated version of the player's position
+            playerPosition = GhostTalk.instance.transform.position;
+
+            yield return null;
+        }
     }
 
     private bool pitCheck()
