@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* TODO: Finish raycasting for the enemy AI
- * - Make all of the values negative when the enemy is flipped so all of the rays are actually in the right spot
- * - Maybe make the raycast methods return the raycasthit info stuff instead of just a true or false cus i kinda need to use some of the other information
- */
+// NOTE TO SELF: READONLY EXISTS
+// FIXME: Ghost sometimes clips high walls when he jumps and doesn't make it
+// FIXME: Ghost jumps up and bonks his head on a platform cus he thinks it's a wall
+// TODO: Polish funky raycast AI values so the ghost seems less robot-y
 
 /// <summary>
 /// Manages a bunch of enemy stuff, like what lines to say, and whether to use manually written lines or not.
@@ -16,6 +16,7 @@ public class EnemyManager : MonoBehaviour
 {
     public GhostMessage ghostMessage;
     static LayerMask walls;
+    //static LayerMask enemyMask;
 
     Animator animator;
 
@@ -33,11 +34,11 @@ public class EnemyManager : MonoBehaviour
         {
             if (value)
             {
+                // play the angry boy animation and chase the player
                 animator.runtimeAnimatorController = angryEnemy;
                 StopAllCoroutines();
                 StartCoroutine(pursuit());
             }
-                
             else
             {
                 // play the normal enemy walk and roam
@@ -45,13 +46,28 @@ public class EnemyManager : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(walk());
             }
-                
 
             angery = value;
         }
     }
 
-    bool moveLeft;
+    static Vector3[] offsets = { new Vector3(20, 16), new Vector3(48, 8), new Vector3(-3, 0) };
+    enum Offsets { Highwall, LowWall, Platform }
+
+    bool _moveLeft;
+    bool moveLeft
+    {
+        get { return _moveLeft; }
+        set
+        {
+            // if the ghost actually flipped, flip all of the offsets
+            if(_moveLeft != value)
+                for (int index = 0; index < offsets.Length; index++)
+                    offsets[index].x *= -1;
+            
+            _moveLeft = value;
+        }
+    }
     //Vector2 movement;
     public float moveSpeed;
     Rigidbody2D rb;
@@ -64,6 +80,7 @@ public class EnemyManager : MonoBehaviour
         playerPosition = GhostTalk.instance.transform.position;
 
         walls = 1 << LayerMask.NameToLayer("Platforms");
+        //enemyMask = 1 << LayerMask.NameToLayer("Frenemy");
 
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -73,7 +90,8 @@ public class EnemyManager : MonoBehaviour
 
         sr = GetComponent<SpriteRenderer>();
 
-        moveLeft = randomBoolValue();
+        // move in a random direction
+        moveLeft = Effects.randomBoolValue();
         StartCoroutine(walk());
         Angery = true;
 	}
@@ -81,81 +99,48 @@ public class EnemyManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        //rb.velocity = movement;
-
-        /*
-        if (angery)
-            pursuitAI();
-        else
-            calmAI();
-        */
-    }
-
-    private bool randomBoolValue()
-    {
-        if (Random.Range(1, 3) > 1)
-            return true;
-        else
-            return false;
-    }
-
-    // maybe get rid of this guy right here
-    /// <summary>
-    /// Does a bunch of raycasting so that the enemy doesn't stumble in chases
-    /// </summary>
-    /*
-    private void pursuitAI()
-    {
         
     }
-     */
-    
-
-    // note to self: might not actually need to use a silly lil method for making our ghosty boye walk
-    /// <summary>
-    /// Bunch o raycasting for calm ghosts that like long walks on the beach and
-    /// talking about their feelings
-    /// </summary>
-    /* 
-    private void calmAI()
-    {
-        
-    }
-    */
 
     /// <summary>
-    /// Checks for a high wall for the ghosty boye to jump on
+    /// does a lil raycast in a spot where a high wall would be
     /// </summary>
     /// <returns>is there a wall????</returns>
-    private float highWall()
+    private RaycastHit2D highWallCast()
     {
-        // min offset: (24, 16)
-        float distance = 20;
-        if (sr.flipX)
-            distance *= -1;
+        // shoot a ray down to check for a wall
+        RaycastHit2D ray = Physics2D.Raycast(transform.position + offsets[(int)Offsets.Highwall], Vector2.down, 50, walls);
+        return ray;
+    }
 
-        Vector3 offset = new Vector3(distance, 16);
-        RaycastHit2D ray = Physics2D.Raycast(transform.position + offset, Vector2.down, 4, walls);
-        return ray.distance;
+    /// <summary>
+    /// Check for a wall for the ghost to jump over
+    /// </summary>
+    /// <returns>is there a wall for the ghost to jump over?</returns>
+    private bool highWallAndFloorCheck()
+    {
+        RaycastHit2D ray = highWallCast();
+        float distance = ray.distance;
+
+        // if the distance is 0, the wall is too high
+        // if the distance is 20, the ray is hitting the floor
+        // if the distance is in between, there's a jumpable wall
+        if (distance > 0 && distance < 19)
+            return true;
+
+        return false;
     }
 
     /// <summary>
     /// checks for a smol woll for the ghosty boye to hop up on all scronched-like
     /// </summary>
     /// <returns>is there a tiny lil baby wall????</returns>
-    private float lowWall()
+    private RaycastHit2D lowWall()
     {
-        // min offset: (48, 8)
-        float distance = 48;
-        if (sr.flipX)
-            distance *= -1;
-
-        Vector3 offset = new Vector3(distance, 8);
-        RaycastHit2D ray = Physics2D.Raycast(transform.position + offset, Vector2.down, 4, walls);
-        return ray.distance;
+        RaycastHit2D ray = Physics2D.Raycast(transform.position + offsets[(int)Offsets.LowWall], Vector2.down, 4, walls);
+        return ray;
     }
 
-    // TODO: Maybe get rid of this method and instead check if the high wall check distance is high enough for it to be hitting the ground
     /// <summary>
     /// checks if there's a big ol wall in front of the ghosty boye to avoid hitting
     /// </summary>
@@ -163,19 +148,15 @@ public class EnemyManager : MonoBehaviour
     private bool wallCheck()
     {
         // minimum distance between the enemy and a wall of height 2 where the enemy can jump
-        float distance = 20;
+        //float distance = 20;
 
-        Vector2 direction;
-        if (!sr.flipX)
-            direction = Vector2.right;
-        else
-            direction = Vector2.left;
+        float distance = Mathf.Round(highWallCast().distance);
 
-        RaycastHit2D ray = Physics2D.Raycast(transform.position, direction, distance, walls);
-
-        if (ray.collider != null)
-            return true;
-        return false;
+        // if distance is 20 it's hitting the floor or a pit
+        if (distance >= 19)
+            return false;
+        
+        return true;
     }
 
     // TODO: Make the ghost walk a random distance or smth so he seems smart :)
@@ -205,10 +186,18 @@ public class EnemyManager : MonoBehaviour
         yield break;
     }
 
+    // FIXME: Ghost kinda sorta spazzes out when they finally make it to the player
+        // maybe this won't really be an issue because the ghost won't ever be
+        // just standing at the player's position, by that point the player is 
+        // gonna get smacked and the enemy is gonna stop being angry
+    /// <summary>
+    /// Chase the digga darn player!!!!
+    /// </summary>
     private IEnumerator pursuit()
     {
         sr.flipX = moveLeft;
 
+        // set up movement stuff
         float velocity = 18f;
         float negative = velocity * -1;
         Vector2 movement = new Vector2();
@@ -226,14 +215,26 @@ public class EnemyManager : MonoBehaviour
                 movement.x = velocity;
                 sr.flipX = false;
             }
+
+            moveLeft = sr.flipX;
+
             // make it so the ghost won't get stuck floating in air when applying movement 
             movement.y = rb.velocity.y;
 
             rb.velocity = movement;
 
-            // if there is a wall in the way, jump
-            if (wallCheck() && Mathf.Round(highWall()) == 4)
-                rb.velocity = new Vector2(rb.velocity.x, 10);
+            // OK so this implementation of making the enemy jump over walls
+            // isn't really what i had in mind but it works and if i make it
+            // so the ghost won't jump if the wall is too high it would make this
+            // kinda perfect pretty much :)
+
+            // SO if there's a wall in the way and the player isn't below the ghost
+            // AND the wall is low enough AND there's not a platform, jump
+            if (highWallAndFloorCheck() 
+                && playerPosition.y > transform.position.y 
+                && !platformCheck() 
+                && Effects.checkIfGrounded(transform.position))
+                rb.velocity = new Vector2(rb.velocity.x, 45);
 
             // get an updated version of the player's position
             playerPosition = GhostTalk.instance.transform.position;
@@ -242,16 +243,19 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    private bool pitCheck()
-    {
-        return false;
-    }
-
-    /*
+    // FIXME: Hitting the enemy or something cus it's returning 0 a lot
+    /// <summary>
+    /// Check for a platform above the ghost's head.
+    /// </summary>
+    /// <returns>is there a lil platform above our ghosty boye's head?</returns>
     private bool platformCheck()
     {
+        RaycastHit2D ray = Physics2D.Raycast(transform.position + offsets[(int)Offsets.Platform], Vector2.up, 16, walls);
+
+        if (Mathf.Round(ray.distance) >= 12)
+            return true;
+
         return false;
     }
-    */
 
 }

@@ -8,7 +8,7 @@ using System.IO;
 /// </summary>
 public static class SaveLoadManager
 {
-    static string dataPath = Application.persistentDataPath + "/playerdata.ogdog";
+    public static string dataPath = Application.persistentDataPath + "/playerdata.ogdog";
 
     public static void SavePlayerPosition(PlayerData data)
     {

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 // TODO: Make this static 
 // TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermove
+// TODO: Maybe make the ghost also use the talk prompt for dialogue instead of instantiating a new text box
 
 /// <summary>
 /// sets up a nice conversation with a friendly ghosty boye
@@ -61,13 +62,11 @@ public class Dialogue : MonoBehaviour
     /// <summary>
     /// Starts a conversation with a ghost.
     /// </summary>
-    /// <param name="dialogue">Dialogue.</param>
-    /// <param name="focus">Focus.</param>
-    /// <param name="playerMovement">Player movement.</param>
-    /// <param name="talk">Talk.</param>
-    public void startConversation(GhostMessage dialogue, GameObject focus, PlayerMovement playerMovement)
+    /// <param name="dialogue">message for the ghost to say</param>
+    /// <param name="focus">camera focus point</param>
+    public void startConversation(GhostMessage dialogue, GameObject focus)
     {
-        playerMover = playerMovement;
+        playerMover = PlayerMovement.instance;
         talker = GhostTalk.instance;
 
         // prevent the player from moving and stop them where they are so they can have a nice polite ghost conversation

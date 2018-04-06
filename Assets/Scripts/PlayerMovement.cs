@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// FIXME: Player can sometimes do a double jump off of a friendly ghost's head if they spam spacebar fast enough
 // TODO: Maybe make two seperate controllers for the ghost player and the human player
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     public float moveSpeed;
     public float jumpHeight;
 
@@ -16,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        instance = this;
+
         rb = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
     }
@@ -38,36 +41,10 @@ public class PlayerMovement : MonoBehaviour
         // apply movement
         rb.velocity = new Vector2(xVelocity * moveSpeed, rb.velocity.y);
 
-        bool grounded = checkIfGrounded();
+        bool grounded = Effects.checkIfGrounded(transform.position);
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-    }
-
-    /// <summary>
-    /// Casts a ray towards the ground to check if the player is touching it; 
-    /// if the ray's distance is the same as half of the player's size,
-    /// then the player is grounded.
-    /// </summary>
-    /// <returns>True if the player is grounded, false if not.</returns>
-    bool checkIfGrounded()
-    {
-        int halfPlayerSize = 4;
-
-        // set up a layermask so that the raycast can hit every layer except for the player
-        LayerMask playerMask = 1 << LayerMask.NameToLayer("Player");
-        playerMask = ~playerMask;
-
-        // get the player's position with the given offset applied
-        Vector2 playerLeftPosition = new Vector2(transform.position.x - halfPlayerSize, transform.position.y);
-        Vector2 playerRightPosition = new Vector2(transform.position.x + halfPlayerSize, transform.position.y);
-
-        // cast a ray on the left and right side of the player
-        RaycastHit2D leftRay = Physics2D.Raycast(playerLeftPosition, Vector2.down, Mathf.Infinity, playerMask);
-        RaycastHit2D rightRay = Physics2D.Raycast(playerRightPosition, Vector2.down, Mathf.Infinity, playerMask);
-
-        // if either of the rays' distances is equal to half of the player's size, then the player is touching the ground
-        return Mathf.Round(leftRay.distance) == halfPlayerSize || Mathf.Round(rightRay.distance) == halfPlayerSize;
     }
 
     /// <summary>
