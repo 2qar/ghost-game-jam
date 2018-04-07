@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // NOTE TO SELF: READONLY EXISTS
+// FIXME: Ghost sometimes starts facing the wrong direction which breaks the whole pursuit thingy
 // FIXME: Ghost sometimes clips high walls when he jumps and doesn't make it
 // FIXME: Ghost jumps up and bonks his head on a platform cus he thinks it's a wall
 // TODO: Polish funky raycast AI values so the ghost seems less robot-y
@@ -32,20 +33,13 @@ public class EnemyManager : MonoBehaviour
         get { return angery; }
         set
         {
+            StopAllCoroutines();
             if (value)
-            {
                 // play the angry boy animation and chase the player
-                animator.runtimeAnimatorController = angryEnemy;
-                StopAllCoroutines();
                 StartCoroutine(pursuit());
-            }
             else
-            {
                 // play the normal enemy walk and roam
-                animator.runtimeAnimatorController = enemy;
-                StopAllCoroutines();
                 StartCoroutine(walk());
-            }
 
             angery = value;
         }
@@ -62,14 +56,17 @@ public class EnemyManager : MonoBehaviour
         {
             // if the ghost actually flipped, flip all of the offsets
             if(_moveLeft != value)
+            {
                 for (int index = 0; index < offsets.Length; index++)
                     offsets[index].x *= -1;
+                moveSpeed *= -1;
+            }
             
             _moveLeft = value;
         }
     }
     //Vector2 movement;
-    public float moveSpeed;
+    public float moveSpeed = 15f;
     Rigidbody2D rb;
 
     SpriteRenderer sr;
@@ -77,18 +74,10 @@ public class EnemyManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        playerPosition = GhostTalk.instance.transform.position;
+        getComponents();
 
         walls = 1 << LayerMask.NameToLayer("Platforms");
         //enemyMask = 1 << LayerMask.NameToLayer("Frenemy");
-
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-
-        enemy = Resources.Load<RuntimeAnimatorController>("Animations/Enemy");
-        angryEnemy = Resources.Load<RuntimeAnimatorController>("Animations/AngryEnemy");
-
-        sr = GetComponent<SpriteRenderer>();
 
         // move in a random direction
         moveLeft = Effects.randomBoolValue();
@@ -96,6 +85,19 @@ public class EnemyManager : MonoBehaviour
         Angery = true;
 	}
 	
+    /// <summary>
+    /// Get all of the references to the ghost's components.
+    /// </summary>
+    void getComponents()
+    {
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
+
+        enemy = Resources.Load<RuntimeAnimatorController>("Animations/Enemy");
+        angryEnemy = Resources.Load<RuntimeAnimatorController>("Animations/AngryEnemy");
+    }
+
 	// Update is called once per frame
 	void Update ()
     {
@@ -165,14 +167,17 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private IEnumerator walk()
     {
+        // play the normal walking animation
+        animator.runtimeAnimatorController = enemy;
+
+        // move at a calm pace
+        moveSpeed = 15f;
+
         // make the ghost face the correct direction and move until he finds a wall
         sr.flipX = moveLeft;
         while(!wallCheck())
         {
-            float velocity = 15f;
-            if (sr.flipX)
-                velocity *= -1;
-            rb.velocity = new Vector2(velocity, rb.velocity.y);
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
             yield return null;
         }
 
@@ -195,33 +200,27 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private IEnumerator pursuit()
     {
-        sr.flipX = moveLeft;
+        // play the angry "im-gonna-getcha" animation oooo scary!!!
+        animator.runtimeAnimatorController = angryEnemy;
 
-        // set up movement stuff
-        float velocity = 18f;
-        float negative = velocity * -1;
-        Vector2 movement = new Vector2();
+        // move at an aggressive pace
+        moveSpeed = 18f;
+        sr.flipX = moveLeft;
 
         while(true)
         {
+            // get an updated version of the player's position
+            playerPosition = GhostTalk.instance.transform.position;
+
             // move in the right direction based on where the player is at
             if (transform.position.x > playerPosition.x)
-            {
-                movement.x = negative;
                 sr.flipX = true;
-            }
             else
-            {
-                movement.x = velocity;
                 sr.flipX = false;
-            }
 
             moveLeft = sr.flipX;
 
-            // make it so the ghost won't get stuck floating in air when applying movement 
-            movement.y = rb.velocity.y;
-
-            rb.velocity = movement;
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
 
             // OK so this implementation of making the enemy jump over walls
             // isn't really what i had in mind but it works and if i make it
@@ -235,9 +234,6 @@ public class EnemyManager : MonoBehaviour
                 && !platformCheck() 
                 && Effects.checkIfGrounded(transform.position))
                 rb.velocity = new Vector2(rb.velocity.x, 45);
-
-            // get an updated version of the player's position
-            playerPosition = GhostTalk.instance.transform.position;
 
             yield return null;
         }
