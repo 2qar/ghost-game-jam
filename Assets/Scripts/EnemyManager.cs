@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // NOTE TO SELF: READONLY EXISTS
-// FIXME: Ghost sometimes starts facing the wrong direction which breaks the whole pursuit thingy
+// FIXME: With this new funky system the walk coroutine likes to not work and make the ghost move the wrong way
 // FIXME: Ghost sometimes clips high walls when he jumps and doesn't make it
 // FIXME: Ghost jumps up and bonks his head on a platform cus he thinks it's a wall
 // TODO: Polish funky raycast AI values so the ghost seems less robot-y
@@ -45,7 +45,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    static Vector3[] offsets = { new Vector3(20, 16), new Vector3(48, 8), new Vector3(-3, 0) };
+    static Vector3[] offsets = { new Vector3(19, 16), new Vector3(48, 8), new Vector3(-3, 0) };
     enum Offsets { Highwall, LowWall, Platform }
 
     bool _moveLeft;
@@ -79,10 +79,7 @@ public class EnemyManager : MonoBehaviour
         walls = 1 << LayerMask.NameToLayer("Platforms");
         //enemyMask = 1 << LayerMask.NameToLayer("Frenemy");
 
-        // move in a random direction
-        moveLeft = Effects.randomBoolValue();
-        StartCoroutine(walk());
-        Angery = true;
+        Angery = false;
 	}
 	
     /// <summary>
@@ -162,16 +159,16 @@ public class EnemyManager : MonoBehaviour
     }
 
     // TODO: Make the ghost walk a random distance or smth so he seems smart :)
+    // also TODO: Make the ghost check for pits so he can stand on platforms
     /// <summary>
     /// make the lil ghosty boye walk BUT stop for walls in the way
     /// </summary>
     private IEnumerator walk()
     {
-        // play the normal walking animation
+        // set the ghost up so he's walking calmly in a random direction
         animator.runtimeAnimatorController = enemy;
-
-        // move at a calm pace
         moveSpeed = 15f;
+        moveLeft = Effects.randomBoolValue();
 
         // make the ghost face the correct direction and move until he finds a wall
         sr.flipX = moveLeft;
@@ -200,13 +197,11 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private IEnumerator pursuit()
     {
-        // play the angry "im-gonna-getcha" animation oooo scary!!!
+        // run towards the player w/ the animation
         animator.runtimeAnimatorController = angryEnemy;
-
-        // move at an aggressive pace
         moveSpeed = 18f;
-        sr.flipX = moveLeft;
 
+        // loop to make the ghost chase the player 
         while(true)
         {
             // get an updated version of the player's position
