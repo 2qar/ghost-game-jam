@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // NOTE TO SELF: READONLY EXISTS
-// FIXME: With this new funky system the walk coroutine likes to not work and make the ghost move the wrong way
 // FIXME: Ghost sometimes clips high walls when he jumps and doesn't make it
 // FIXME: Ghost jumps up and bonks his head on a platform cus he thinks it's a wall
 // TODO: Polish funky raycast AI values so the ghost seems less robot-y
@@ -15,6 +14,9 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyManager : MonoBehaviour
 {
+    const float speed = 15f;
+    const float angrySpeed = 18f;
+
     public GhostMessage ghostMessage;
     static LayerMask walls;
     //static LayerMask enemyMask;
@@ -34,12 +36,28 @@ public class EnemyManager : MonoBehaviour
         set
         {
             StopAllCoroutines();
+            // if angry
             if (value)
-                // play the angry boy animation and chase the player
+            {
+                // run towards the player w/ the animation
+                animator.runtimeAnimatorController = angryEnemy;
+                if(moveLeft)
+                    moveSpeed = angrySpeed * -1;
+                else
+                    moveSpeed = angrySpeed;
                 StartCoroutine(pursuit());
+            }
+            // if calm 
             else
+            {
                 // play the normal enemy walk and roam
+                animator.runtimeAnimatorController = enemy;
+                if(moveLeft)
+                    moveSpeed = speed * -1;
+                else
+                    moveSpeed = speed;
                 StartCoroutine(walk());
+            }
 
             angery = value;
         }
@@ -79,6 +97,7 @@ public class EnemyManager : MonoBehaviour
         walls = 1 << LayerMask.NameToLayer("Platforms");
         //enemyMask = 1 << LayerMask.NameToLayer("Frenemy");
 
+        moveLeft = Effects.randomBoolValue();
         Angery = false;
 	}
 	
@@ -165,11 +184,6 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private IEnumerator walk()
     {
-        // set the ghost up so he's walking calmly in a random direction
-        animator.runtimeAnimatorController = enemy;
-        moveSpeed = 15f;
-        moveLeft = Effects.randomBoolValue();
-
         // make the ghost face the correct direction and move until he finds a wall
         sr.flipX = moveLeft;
         while(!wallCheck())
@@ -197,10 +211,6 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     private IEnumerator pursuit()
     {
-        // run towards the player w/ the animation
-        animator.runtimeAnimatorController = angryEnemy;
-        moveSpeed = 18f;
-
         // loop to make the ghost chase the player 
         while(true)
         {

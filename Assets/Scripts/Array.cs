@@ -14,4 +14,5 @@ public static class Array
         for (int index = 0; index < array.Length; index++)
             array[index] = value;
     }
+
 }
