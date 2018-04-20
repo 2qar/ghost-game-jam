@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO: Maybe make two seperate controllers for the ghost player and the human player
+    // maybe
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed;
     public float jumpHeight;
 
-    Rigidbody2D rb;
-    SpriteRenderer sr;
+    public Rigidbody2D rb { get; protected set; }
+    public SpriteRenderer sr { get; protected set; }
 
     // Use this for initialization
     void Start()
@@ -37,16 +38,17 @@ public class PlayerMovement : MonoBehaviour
         // get horizontal movement
         float xVelocity = Input.GetAxis("Horizontal");
         // check whether to flip the player's sprite or not
-        flipPlayerSprite(xVelocity);
+        //flipPlayerSprite(xVelocity);
         // apply movement
         rb.velocity = new Vector2(xVelocity * moveSpeed, rb.velocity.y);
 
-        bool grounded = Effects.checkIfGrounded(transform.position);
+        bool grounded = Raycaster.checkIfGrounded(transform.position);
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
     }
 
+    /* 
     /// <summary>
     /// Flip the player's sprite based on their movement input.
     /// </summary>
@@ -60,5 +62,7 @@ public class PlayerMovement : MonoBehaviour
         else if(movement > 0)
             sr.flipX = false;
     }
+    */
 
 }
+

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 // TODO: Make this static 
 // TODO: Tidy up the start conversation method by removing some references not needed ex. ghosttalk, playermove
 // TODO: Maybe make the ghost also use the talk prompt for dialogue instead of instantiating a new text box
+// TODO: Add a spooky lil "ooOOOOooo" sound that plays at the start of every line w/ a random pitch in a set range
+    // maybe even make the pitch of a message modifiable??????
+        // maybe not because then i would have to replace all of my messages again????
 
 /// <summary>
 /// sets up a nice conversation with a friendly ghosty boye

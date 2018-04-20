@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 3bf76718dd3114fd8a9a1b2fce93b0c3
+timeCreated: 1524154750
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - idleSprite: {fileID: 21300002, guid: eca826a5147ea4d739e11457139089f0, type: 3}
+  - idleEyesSprite: {fileID: 21300002, guid: 3b35a60b0dc074855a424850448bdd22, type: 3}
+  - idle: {instanceID: 0}
+  - movement: {fileID: 9100000, guid: 4644da7b9150d4680af31cfeb9828c2e, type: 2}
+  - movementEyes: {instanceID: 0}
+  - jump: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
