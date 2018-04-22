@@ -13,8 +13,6 @@ public class GhostTalk : MonoBehaviour
 
     SpriteRenderer sr;
 
-    PlayerMovement playerMovement;
-
     [HideInInspector]
     public bool talkingToGhost;
 
@@ -26,7 +24,6 @@ public class GhostTalk : MonoBehaviour
         instance = this;
 
         sr = GetComponent<SpriteRenderer>();
-        playerMovement = GetComponent<PlayerMovement>();
 	}
 	
 	// Update is called once per frame

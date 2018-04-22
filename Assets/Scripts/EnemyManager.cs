@@ -22,10 +22,11 @@ public class EnemyManager : MonoBehaviour
     Raycaster caster;    
 
     public Animator animator { get; protected set; }
+    MovementAnimation movementAnimation;
 
     // enemy animations
-    RuntimeAnimatorController enemy;
-    RuntimeAnimatorController angryEnemy;
+    //RuntimeAnimatorController enemy;
+    //RuntimeAnimatorController angryEnemy;
 
     Vector2 playerPosition;
 
@@ -38,10 +39,10 @@ public class EnemyManager : MonoBehaviour
             StopAllCoroutines();
             if (value)
                 // run towards the player w/ the animation
-                updateEnemyState(angryEnemy, angrySpeed, pursuit());
+                updateEnemyState(angrySpeed, pursuit());
             else
                 // play the normal enemy walk and roam
-                updateEnemyState(enemy, speed, walk());
+                updateEnemyState(speed, walk());
 
             angery = value;
         }
@@ -95,17 +96,18 @@ public class EnemyManager : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        movementAnimation = GetComponent<MovementAnimation>();
 
-        enemy = Resources.Load<RuntimeAnimatorController>("Animations/Enemy");
-        angryEnemy = Resources.Load<RuntimeAnimatorController>("Animations/AngryEnemy");
+        //enemy = Resources.Load<RuntimeAnimatorController>("Animations/Enemy");
+        //angryEnemy = Resources.Load<RuntimeAnimatorController>("Animations/AngryEnemy");
     }
 
     /// <summary>
     /// Update how the enemy is animated, how fast they move, and how they move.
     /// </summary>
-    void updateEnemyState(RuntimeAnimatorController animation, float speed, IEnumerator movement)
+    void updateEnemyState(float speed, IEnumerator movement)
     {
-        animator.runtimeAnimatorController = animation;
+        animator.SetBool("Angry", angery);
         moveSpeed = getCorrectDirection(speed);
         StartCoroutine(movement);
     }
