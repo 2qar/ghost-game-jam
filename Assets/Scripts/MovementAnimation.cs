@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Patch up all of the animator controllers so they're not just entry garbage,
-    // design them like they're meant to be designed, as a state machine, dummy
-    // note: if i just use the animatorcontrollers like they're meant to be used i think i can just get rid of this class
-// TODO: Make this a MonoBehaviour because that would be way more convenient
+/**VERY SUPER IMPORTANT!!!!
+ * TODO: Consider switching from this lame pixel art to some fancy and cozy normal art because it would probably be a whole lot better than the current art style
+ *     maybe use Illustrator to create all of the cute ghost art unless you can find a drawing tablet again because otherwise hehe im shit out of luck here bucko
+ *     
+ * I feel like this dumb ol pixel art style is really crampin on me ya know
+ * I'm super limited if I keep using this pixel art style and it's really annoying because there's a lot of things that I want to add that can't really be conveyed in an 8x8 space
+ */
+
+/// <summary>
+/// Update a parameters on an object's animator controller so that movement is animated based on given input.
+/// </summary>
+[RequireComponent(typeof(Animator))]
 public class MovementAnimation : MonoBehaviour
 {
-	//public Sprite idleSprite;
-    //public Sprite idleEyesSprite;
     RuntimeAnimatorController controller;
-    //public RuntimeAnimatorController movement;
-    //public RuntimeAnimatorController movementEyes;
-    //public Sprite jump;
 
     Animator animator;
     Animator eyeAnimator;
@@ -21,19 +24,26 @@ public class MovementAnimation : MonoBehaviour
     SpriteRenderer sr;
     SpriteRenderer eyeSr;
 
+    public bool grounded;
+    public bool pressingMovementKey;
+
     void Start()
     {
+        GameObject eyes = transform.GetChild(0).gameObject;
+
         animator = GetComponent<Animator>();
         controller = animator.runtimeAnimatorController;
-        eyeAnimator = GetComponentInChildren<Animator>();
+        eyeAnimator = eyes.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        eyeSr = GetComponentInChildren<SpriteRenderer>();
+        eyeSr = eyes.GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         animate();
+
+        print(grounded);
     }
 
     /// <summary>
@@ -48,42 +58,17 @@ public class MovementAnimation : MonoBehaviour
     }
 
 	/// <summary>
-    /// Animate a ghost based on their rigidbody velocity.
+    /// Set flags for the animator to play the correct animations based on whether or not the ghost to animate is moving or not and stuff like that
     /// </summary>
     /// <param name= "movement">
 	/// The object's movement; pass in rigidbody velocity
     /// </param>
     private void animateSprite(Vector2 movement)
     {
-        // if the ghost's y velocity is actually something, play the jump animation
-        if(movement.y != 0)
-            //sr.sprite = this.jump;
-            updateAnimators("Jumping", true);
-        // if the ghost is moving to the left or right, play a walking animation if it's given
-        else if(movement.x != 0)
-            //animator.runtimeAnimatorController = this.movement;
-            updateAnimators("Moving", true);
-        // if the ghost isn't moving at all, play an idle animation or just use an idle sprite
-        else
-            //if(idle != null)
-                //animator.runtimeAnimatorController = this.idle;
-                updateAnimators(new string[]{"Jumping", "Moving"}, false);
-            //else
-                //sr.sprite = idleSprite;
-    }
+        updateAnimators("Jumping", !grounded);
 
-    /* 
-    /// <summary>
-    /// Animate the eyes based on which animation is currently playing.
-    /// </summary>
-    private void animateEyes()
-    {
-        if(animator.runtimeAnimatorController == movement)
-            eyeAnimator.runtimeAnimatorController = movementEyes;
-        else
-            eyeSr.sprite = idleEyesSprite;
+        updateAnimators("Moving", pressingMovementKey);
     }
-    */
 
     /// <summary>
     /// Flip the sprite based on movement.
@@ -107,8 +92,10 @@ public class MovementAnimation : MonoBehaviour
     /// </summary>
     private void updateAnimators(string param, bool value)
     {
-        animator.SetBool(param, value);
-        eyeAnimator.SetBool(param, value);
+        if(animator.runtimeAnimatorController != null)      // temp line
+            animator.SetBool(param, value);
+        if(eyeAnimator.runtimeAnimatorController != null)   // temp line
+            eyeAnimator.SetBool(param, value);
     }
 
     /// <summary>

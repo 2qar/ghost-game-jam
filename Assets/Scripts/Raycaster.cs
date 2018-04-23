@@ -39,9 +39,9 @@ public class Raycaster
     /// </summary>
     public void flipOffsets()
     {
-        this.highWallOffset = new Vector2(this.highWallOffset.x * -1, this.highWallOffset.y);
-        this.lowWallOffset = new Vector2(this.lowWallOffset.x * -1, this.lowWallOffset.y);
-        this.platformOffset = new Vector2(this.platformOffset.x * -1, this.platformOffset.y);
+        highWallOffset = new Vector2(highWallOffset.x * -1, highWallOffset.y);
+        lowWallOffset = new Vector2(lowWallOffset.x * -1, lowWallOffset.y);
+        platformOffset = new Vector2(platformOffset.x * -1, platformOffset.y);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class Raycaster
     private RaycastHit2D highWallCast()
     {
         // shoot a ray down to check for a wall
-        RaycastHit2D ray = Physics2D.Raycast(this.position + this.highWallOffset, Vector2.down, 50, platforms);
+        RaycastHit2D ray = Physics2D.Raycast(position + highWallOffset, Vector2.down, 50, platforms);
         return ray;
     }
 
@@ -99,7 +99,7 @@ public class Raycaster
     /// <returns>is there a tiny lil baby wall????</returns>
     public RaycastHit2D lowWall()
     {
-        RaycastHit2D ray = Physics2D.Raycast(this.position + this.lowWallOffset, Vector2.down, 4, platforms);
+        RaycastHit2D ray = Physics2D.Raycast(position + lowWallOffset, Vector2.down, 4, platforms);
         return ray;
     }
 
@@ -125,7 +125,7 @@ public class Raycaster
     /// <returns>is there a lil platform above our ghosty boye's head?</returns>
     public bool platformCheck()
     {
-        RaycastHit2D ray = Physics2D.Raycast(this.position + this.platformOffset, Vector2.up, 16, platforms);
+        RaycastHit2D ray = Physics2D.Raycast(position + platformOffset, Vector2.up, 16, platforms);
 
         if (Mathf.Round(ray.distance) >= 12)
             return true;

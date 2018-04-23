@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement instance;
 
+    private MovementAnimation movementAnimation;
+
     public float moveSpeed;
     public float jumpHeight;
 
@@ -22,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
+
+        movementAnimation = GetComponent<MovementAnimation>();
     }
 
     // Update is called once per frame
@@ -37,32 +41,21 @@ public class PlayerMovement : MonoBehaviour
     {
         // get horizontal movement
         float xVelocity = Input.GetAxis("Horizontal");
-        // check whether to flip the player's sprite or not
-        //flipPlayerSprite(xVelocity);
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+            movementAnimation.pressingMovementKey = true;
+        else
+            movementAnimation.pressingMovementKey = false;
+
         // apply movement
         rb.velocity = new Vector2(xVelocity * moveSpeed, rb.velocity.y);
 
         bool grounded = Raycaster.checkIfGrounded(transform.position);
+        movementAnimation.grounded = grounded;
 
+        // jump if the player is on the ground and presses the space bar
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
     }
-
-    /* 
-    /// <summary>
-    /// Flip the player's sprite based on their movement input.
-    /// </summary>
-    /// <param name="movement">
-    /// Player movement input.
-    /// </param>
-    void flipPlayerSprite(float movement)
-    {
-        if (movement < 0)
-            sr.flipX = true;
-        else if(movement > 0)
-            sr.flipX = false;
-    }
-    */
 
 }
 
