@@ -41,9 +41,8 @@ public class MovementAnimation : MonoBehaviour
 
     void Update()
     {
-        animate();
-
-        print(grounded);
+        try { animate(); }
+        catch{}
     }
 
     /// <summary>
@@ -52,7 +51,7 @@ public class MovementAnimation : MonoBehaviour
     /// </summary>
     public void animate()
     {
-        animateSprite(rb.velocity);
+        animateSprite();
         //animateEyes();
         flipSprite();
     }
@@ -63,7 +62,7 @@ public class MovementAnimation : MonoBehaviour
     /// <param name= "movement">
 	/// The object's movement; pass in rigidbody velocity
     /// </param>
-    private void animateSprite(Vector2 movement)
+    private void animateSprite()
     {
         updateAnimators("Jumping", !grounded);
 
@@ -92,10 +91,10 @@ public class MovementAnimation : MonoBehaviour
     /// </summary>
     private void updateAnimators(string param, bool value)
     {
-        if(animator.runtimeAnimatorController != null)      // temp line
-            animator.SetBool(param, value);
-        if(eyeAnimator.runtimeAnimatorController != null)   // temp line
-            eyeAnimator.SetBool(param, value);
+        try { animator.SetBool(param, value); }
+        catch {}
+        try { eyeAnimator.SetBool(param, value); }
+        catch {}
     }
 
     /// <summary>

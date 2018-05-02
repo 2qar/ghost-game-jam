@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// NOTE TO SELF: READONLY EXISTS
 // FIXME: Ghost jumps up and bonks his head on a platform cus he thinks it's a wall
 // TODO: Polish funky raycast AI values so the ghost seems less robot-y
 // TODO: In the pursuit method, replace the player's position with the current position of the body being sought after
@@ -23,10 +22,6 @@ public class EnemyManager : MonoBehaviour
 
     public Animator animator { get; protected set; }
     MovementAnimation movementAnimation;
-
-    // enemy animations
-    //RuntimeAnimatorController enemy;
-    //RuntimeAnimatorController angryEnemy;
 
     Vector2 playerPosition;
 
@@ -97,9 +92,6 @@ public class EnemyManager : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         movementAnimation = GetComponent<MovementAnimation>();
-
-        //enemy = Resources.Load<RuntimeAnimatorController>("Animations/Enemy");
-        //angryEnemy = Resources.Load<RuntimeAnimatorController>("Animations/AngryEnemy");
     }
 
     /// <summary>

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+// TODO: Make an event or something that maybe inverts all of the colors or does something cool with the color palette when the player hops into a body
+
 /// <summary>
 /// Basically debug stuff right now, but might store whether the player is a ghost or not and health later.
 /// </summary>
