@@ -20,6 +20,14 @@ public class BodyManager : Interactable
 		get { return _occupied; }
 		set
 		{
+			// make all of the enemies angry when the player gets into a body
+			if(value)
+			{
+				GameObject[] enemies = GameObject.FindGameObjectsWithTag("Ghost");
+				foreach(GameObject enemy in enemies)
+					enemy.GetComponent<EnemyManager>().Angery = true;
+			}
+
 			switchBodies(value);
 			_occupied = value;
 		}
@@ -74,4 +82,5 @@ public class BodyManager : Interactable
 
 		changeTriggerState();
 	}
+
 }

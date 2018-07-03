@@ -14,7 +14,7 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     const float speed = 15f;
-    const float angrySpeed = 18f;
+    const float angrySpeed = 20f;
 
     public GhostMessage ghostMessage;
     static LayerMask walls;
@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
         get { return angery; }
         set
         {
+            angery = value;
             StopAllCoroutines();
             if (value)
                 // run towards the player w/ the animation
@@ -38,8 +39,6 @@ public class EnemyManager : MonoBehaviour
             else
                 // play the normal enemy walk and roam
                 updateEnemyState(speed, walk());
-
-            angery = value;
         }
     }
 

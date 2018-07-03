@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/**VERY SUPER IMPORTANT!!!!
- * TODO: Consider switching from this lame pixel art to some fancy and cozy normal art because it would probably be a whole lot better than the current art style
- *     maybe use Illustrator to create all of the cute ghost art unless you can find a drawing tablet again because otherwise hehe im shit out of luck here bucko
- *     
- * I feel like this dumb ol pixel art style is really crampin on me ya know
- * I'm super limited if I keep using this pixel art style and it's really annoying because there's a lot of things that I want to add that can't really be conveyed in an 8x8 space
- */
-
 /// <summary>
 /// Update a parameters on an object's animator controller so that movement is animated based on given input.
 /// </summary>

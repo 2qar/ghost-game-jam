@@ -1966,7 +1966,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1898302212664538, guid: fce75aed445284477aba7ccb321c2d65, type: 2}
       propertyPath: m_TagString
-      value: Ghost
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 114714495140719542, guid: fce75aed445284477aba7ccb321c2d65,
         type: 2}
@@ -2145,7 +2145,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1193231024}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1997085503}

@@ -6,6 +6,8 @@ public abstract class Interactable : MonoBehaviour
 {
 	private const string PLAYER = "Player";
 
+	GhostTalk player;
+
 	public BoxCollider2D triggerAreaBox;
 	public CircleCollider2D triggerAreaCircle;
 
@@ -15,6 +17,8 @@ public abstract class Interactable : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		player = GhostTalk.instance;
+
 		// try to get the trigger collider of choice and make it a trigger
 		if(!useCircle)
 		{
@@ -37,6 +41,9 @@ public abstract class Interactable : MonoBehaviour
 	{
 		inputCheck();
 		UpdateExtra();
+
+		if(player.talkingToGhost)
+			triggered = false;
 	}
 
 	public abstract void UpdateExtra();
